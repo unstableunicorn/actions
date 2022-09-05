@@ -40,20 +40,20 @@ jobs:
         run: echo "${{ needs.changes.outputs.files }}"
 
       - name: "child one"
-        if: contains(fromJson(${{ needs.changes.outputs.files }}), "src/children/one")
+        if: contains(${{ needs.changes.outputs.files }}, "src/children/one")
         run: echo "i modified child one"
 
       - name: "child two" 
         if: contains(${{ needs.changes.outputs.files }}, "src/children/two")
         run: echo "i modified child two"
       
-      # - name: "children"
-      #   if: contains(fromJson(${{ needs.changes.outputs.files }}), "src/children")
-      #   run: echo "i modified my children"
+      - name: "children"
+        if: contains(${{ needs.changes.outputs.files }}, "src/children")
+        run: echo "i modified my children"
 
-      # - name: "only child"
-      #   if: contains(fromJson(${{ needs.changes.outputs.files }}), "src/onlychild")
-      #   run: echo "i modified my only child"
+      - name: "only child"
+        if: contains(${{ needs.changes.outputs.files }}, "src/onlychild")
+        run: echo "i modified my only child"
   
   child:
     uses: ./.github/workflows/child1.yml
