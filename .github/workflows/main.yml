@@ -57,7 +57,7 @@ jobs:
   
   child:
     uses: ./.github/workflows/child-workflow.yml
-    if: ${{ needs.changes.outputs.srcout == true }}
+    if: ${{ needs.changes.outputs.srcout == 'true' }}
     needs: changes
     with:
       changes: ${{ needs.changes.outputs.files }}
