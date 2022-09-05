@@ -15,6 +15,7 @@ runs:
   using: composite
   steps:
   - name: "changed files"
+    if: ${{ inputs.run == 'true' }}
     run: echo "${{ inputs.changes }}"
     shell: bash
 
