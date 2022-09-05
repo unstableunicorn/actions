@@ -5,6 +5,9 @@ inputs:
   changes:
     required: true
     description: "the files changed"
+  run:
+    description: "Do I run"
+    required: true
 
 
 runs:
