@@ -31,8 +31,6 @@ jobs:
     if: ${{ needs.changes.outputs.srcout == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
       - name: "changed filters"
         run: echo "${{ needs.changes.outputs.filters }}"
 
@@ -61,3 +59,13 @@ jobs:
     needs: changes
     with:
       changes: ${{ needs.changes.outputs.files }}
+  
+  actions:
+    needs: changes
+    runs-on: ubuntu-latest
+    steps:
+    - name: "action-one"
+      uses: ./.github/actions/action-one
+      with:
+        changes: ${{ needs.changes.outputs.files }}
+

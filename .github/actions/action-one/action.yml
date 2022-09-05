@@ -1,0 +1,36 @@
+name: "action one"
+description: "the first action"
+
+inputs:
+  changes:
+    required: true
+    description: "the files changed"
+
+
+runs:
+  
+  using: composite
+  steps:
+  - name: "changed files"
+    run: echo "${{ inputs.changes }}"
+    shell: bash
+
+  - name: "child one"
+    if: ${{ contains(inputs.changes, 'src/children/one') }}
+    shell: bash
+    run: echo "i modified child one"
+
+  - name: "child two" 
+    if: ${{ contains(inputs.changes, 'src/children/two') }}
+    shell: bash
+    run: echo "i modified child two"
+  
+  - name: "children"
+    if: ${{ contains(inputs.changes, 'src/children/children.yml') }}
+    shell: bash
+    run: echo "i modified my children"
+
+  - name: "only child"
+    if: ${{ contains(inputs.changes, 'src/onlychild') }}
+    shell: bash
+    run: echo "i modified my only child"
