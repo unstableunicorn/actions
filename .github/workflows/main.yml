@@ -33,4 +33,4 @@ jobs:
         run: echo "${{ needs.changes.outputs.srcout }}"
   
   child:
-    uses: ./.github/workflows/child.yml
+    uses: ./.github/workflows/child1.yml
