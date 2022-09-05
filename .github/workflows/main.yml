@@ -1,0 +1,36 @@
+name: main
+
+on:
+  push:
+    paths-ignore:
+      - ".gitignore"
+      - "LICENSE"
+      - "README.md"
+    branches:
+      - "main"
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      srcout: ${{ steps.filter.outputs.src }}
+    steps:
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          src:
+            - src/**
+
+  basic:
+    needs: changes
+    if: ${{ needs.changes.outputs.srcout == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "echo changes"
+        run: echo "${{ needs.changes.outputs.srcout }}"
+  
+  child:
+    uses: ./.github/workflows/child.yml

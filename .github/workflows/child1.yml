@@ -1,0 +1,11 @@
+name: child1.yml
+
+on:
+  workflow_call:
+    
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: hello
+        run: echo "hello from child1.yml"
