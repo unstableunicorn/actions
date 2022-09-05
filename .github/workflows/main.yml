@@ -15,7 +15,7 @@ jobs:
     outputs:
       srcout: ${{ steps.filter.outputs.src }}
       filters: ${{ steps.filter.outputs.changes }}
-      files: ${{ steps.filter.outputs.changed_files }}
+      files: ${{ steps.filter.outputs.src_files }}
     steps:
     - uses: actions/checkout@v3
     - uses: dorny/paths-filter@v2
