@@ -14,12 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       srcout: ${{ steps.filter.outputs.src }}
-      changes: ${{ steps.filter.outputs.changes }}
+      filters: ${{ steps.filter.outputs.changes }}
+      files: ${{ steps.filter.outputs.changed_files }}
     steps:
     - uses: actions/checkout@v3
     - uses: dorny/paths-filter@v2
       id: filter
       with:
+        list-files: 'json'
         filters: |
           src:
             - src/**
@@ -31,8 +33,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: "echo changes"
-        run: echo "${{ needs.changes.outputs.changes }}"
+      - name: "changed filters"
+        run: echo "${{ needs.changes.outputs.filters }}"
+
+      - name: "changed files"
+        run: echo "${{ needs.changes.outputs.files }}"
   
   child:
     uses: ./.github/workflows/child1.yml
