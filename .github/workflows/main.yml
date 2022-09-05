@@ -56,4 +56,8 @@ jobs:
         run: echo "i modified my only child"
   
   child:
-    uses: ./.github/workflows/child1.yml
+    uses: ./.github/workflows/child-workflow.yml
+    if: ${{ needs.changes.outputs.src == true }}
+    needs: changes
+    with:
+      changes: ${{ needs.changes.outputs.files }}
