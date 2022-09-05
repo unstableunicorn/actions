@@ -20,7 +20,7 @@ jobs:
         run: echo "i modified child one"
 
       - name: "child two" 
-        if: ${{ contains(fromJson(inputs.changes), 'src/children/two') }}
+        if: ${{ contains(inputs.changes), 'src/children/two') }}
         run: echo "i modified child two"
       
       - name: "children"

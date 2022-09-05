@@ -44,7 +44,7 @@ jobs:
         run: echo "i modified child one"
 
       - name: "child two" 
-        if: ${{ contains(fromJson(needs.changes.outputs.files), 'src/children/two') }}
+        if: ${{ contains(needs.changes.outputs.files, 'src/children/two') }}
         run: echo "i modified child two"
       
       - name: "children"
@@ -57,7 +57,7 @@ jobs:
   
   child:
     uses: ./.github/workflows/child-workflow.yml
-    if: ${{ needs.changes.outputs.src == true }}
+    if: ${{ needs.changes.outputs.srcout == true }}
     needs: changes
     with:
       changes: ${{ needs.changes.outputs.files }}
