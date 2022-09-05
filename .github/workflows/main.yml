@@ -48,7 +48,7 @@ jobs:
         run: echo "i modified child two"
       
       - name: "children"
-        if: ${{ contains(needs.changes.outputs.files, 'src/children') }}
+        if: ${{ contains(needs.changes.outputs.files, 'src/children/children.yml') }}
         run: echo "i modified my children"
 
       - name: "only child"
