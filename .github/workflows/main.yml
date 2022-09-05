@@ -76,3 +76,4 @@ jobs:
       uses: ./.github/actions/action-one
       with:
         changes: ${{ needs.changes.outputs.files }}
+        run: ${{ needs.changes.outputs.srcout == 'true' }}

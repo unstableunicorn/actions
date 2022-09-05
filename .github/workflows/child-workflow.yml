@@ -7,12 +7,18 @@ on:
         description: "The changes"
         required: true
         type: string
+      run:
+        description: "Do I run"
+        required: true
+        type: boolean
+        default: false
     
 jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
       - name: "changed files"
+        if: ${{ inputs.run }}
         run: echo "${{ inputs.changes }}"
 
       - name: "child one"
