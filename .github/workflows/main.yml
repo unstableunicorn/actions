@@ -13,18 +13,22 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-      srcout: ${{ steps.filter.outputs.src }}
-      filters: ${{ steps.filter.outputs.changes }}
-      files: ${{ steps.filter.outputs.src_files }}
+      srcout: ${{ steps.filterid.outputs.src }}
+      filters: ${{ steps.filterid.outputs.changes }}
+      files: ${{ steps.filterid.outputs.src_files }}
     steps:
     - uses: actions/checkout@v3
     - uses: dorny/paths-filter@v2
-      id: filter
+      id: filterid
       with:
         list-files: 'json'
         filters: |
           src:
             - src/**
+    - name: "output changes to env"
+      run: echo "are_files_changed=${{ steps.filterid.outputs.src }}" >> $GITHUB_ENV
+    - name: "output files to env"
+      run: echo "files_changed"=${{ steps.filterid.outputs.src_files }}" >> $GITHUB_ENV
 
   basic:
     needs: changes
@@ -55,12 +59,12 @@ jobs:
   
   child:
     uses: ./.github/workflows/child-workflow.yml
-    if: ${{ needs.changes.outputs.srcout == 'true' }}
+    if: ${{ env.are_files_changed == 'true' }}
     needs: changes
     with:
       changes: ${{ needs.changes.outputs.files }}
   
-  actions:
+  action-one:
     needs: changes
     runs-on: ubuntu-latest
     steps:
@@ -68,5 +72,5 @@ jobs:
     - name: "action-one"
       uses: ./.github/actions/action-one
       with:
-        changes: ${{ needs.changes.outputs.files }}
+        changes: ${{ env.files_changed }}
 
