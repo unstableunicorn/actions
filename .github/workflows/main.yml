@@ -75,7 +75,7 @@ jobs:
     if: ${{ needs.changes.outputs.srcout == 'true' && github.event_name != 'pull_request' }}
     environment: prod
     concurrency:
-      cancel-in-progress: true
+      cancel-in-progress: false
       group: prod-env
     needs: changes
     runs-on: ubuntu-latest
