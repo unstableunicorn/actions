@@ -10,6 +10,10 @@ on:
     
 jobs:
   child-workflow-job1:
+    environment: test
+    concurrency:
+      cancel-in-progress: true
+      group: test-env
     runs-on: ubuntu-latest
     steps:
       - name: "changed files"

@@ -34,6 +34,10 @@ jobs:
             - src/**
 
   basic:
+    environment: dev
+    concurrency:
+      cancel-in-progress: false
+      group: dev-env
     needs: changes
     if: ${{ needs.changes.outputs.srcout == 'true' }}
     runs-on: ubuntu-latest
@@ -62,12 +66,17 @@ jobs:
   
   child:
     uses: ./.github/workflows/child-workflow.yml
-    if: ${{ needs.changes.outputs.srcout == 'true' }}
+    if: ${{ needs.changes.outputs.srcout == 'true' && github.event_name != 'pull_request' }}
     needs: changes
     with:
       changes: ${{ needs.changes.outputs.files }}
   
   action-one:
+    if: ${{ needs.changes.outputs.srcout == 'true' && github.event_name != 'pull_request' }}
+    environment: prod
+    concurrency:
+      cancel-in-progress: true
+      group: prod-env
     needs: changes
     runs-on: ubuntu-latest
     steps:
