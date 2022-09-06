@@ -19,33 +19,18 @@ jobs:
       - name: "changed files"
         run: echo "${{ inputs.changes }}"
       
-      - name: wait
-        run: sleep 2m
-
       - name: "child one"
         if: ${{ contains(inputs.changes, 'src/children/one') }}
         run: echo "i modified child one"
-      
-      - name: wait
-        run: sleep 2m
 
       - name: "child two" 
         if: ${{ contains(inputs.changes, 'src/children/two') }}
         run: echo "i modified child two"
       
-      - name: wait
-        run: sleep 2m
-      
       - name: "children"
         if: ${{ contains(inputs.changes, 'src/children/children.yml') }}
         run: echo "i modified my children"
       
-      - name: wait
-        run: sleep 2m
-
       - name: "only child"
         if: ${{ contains(inputs.changes, 'src/onlychild') }}
         run: echo "i modified my only child"
-      
-      - name: wait
-        run: sleep 2m

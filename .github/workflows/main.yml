@@ -39,7 +39,6 @@ jobs:
       cancel-in-progress: false
       group: dev-env
     needs: changes
-    if: ${{ needs.changes.outputs.srcout == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: "changed filters"
@@ -77,7 +76,9 @@ jobs:
     concurrency:
       cancel-in-progress: false
       group: prod-env
-    needs: changes
+    needs:
+      - changes
+      - basic
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3 # local actions need a checkout
