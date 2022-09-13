@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github.event) }}'
+      - name: "whole context of fun"
+        run: echo '${{ toJSON(github) }}'
 
   # on-pr:
   #   runs-on: ubuntu-latest
