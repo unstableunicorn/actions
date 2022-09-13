@@ -22,22 +22,26 @@ on:
 jobs:
   on-all:
     runs-on: ubuntu-latest
+    env:
+      GHEVENT: ${{ github.event }}
     steps:
       - name: "output event"
-        run: echo ${{ github.event }}
+        run: echo ${{ github.event }} | jq 
+      - name: "output event2"
+        run: jq . ${{ github.event }}
 
-  on-pr:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.head.repo.fork }} || github.event.ref == 'refs/heads/main' || github.event.pull_request.merged == true
-    steps:
-      - name: "output event"
-        run: echo ${{ github.event }}
+  # on-pr:
+  #   runs-on: ubuntu-latest
+  #   if: ${{ github.event.pull_request.head.repo.fork }} || github.event.ref == 'refs/heads/main' || github.event.pull_request.merged == true
+  #   steps:
+  #     - name: "output event"
+  #       run: echo ${{ github.event }}
 
           
-  on-deploy:
-    runs-on: ubuntu-latest
-    # Trigger on CICD Pipeline for trunk runs
-    if: github.event.workflow.name == 'main' && github.event.ref == 'refs/heads/main'
-    steps:
-      - name: "output event"
-        run: echo ${{ github.event }}
+  # on-deploy:
+  #   runs-on: ubuntu-latest
+  #   # Trigger on CICD Pipeline for trunk runs
+  #   if: github.event.workflow.name == 'main' && github.event.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: "output event"
+  #       run: echo ${{ github.event }}
