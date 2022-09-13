@@ -24,9 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "output event"
-        run: echo ${{ github.event }} | jq 
-      - name: "output event2"
-        run: jq . ${{ github.event }}
+        run: echo ${{ toJSON(github.event) }}
+      - name: "output event"
+        run: echo ${{ fromJSON(github.event) }}
 
   # on-pr:
   #   runs-on: ubuntu-latest
