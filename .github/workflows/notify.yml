@@ -22,13 +22,9 @@ on:
 jobs:
   on-all:
     runs-on: ubuntu-latest
-    env:
-      GHEVENT: ${{ github.event }}
     steps:
-      - name: "output event"
-        run: echo ${{ github.event }} | jq 
-      - name: "output event2"
-        run: jq . ${{ github.event }}
+      - name: "${{ github.event_name }}"
+        run: echo '${{ toJSON(github) }}'
 
   # on-pr:
   #   runs-on: ubuntu-latest
