@@ -23,7 +23,7 @@ jobs:
   on-all:
     runs-on: ubuntu-latest
     steps:
-      - name: "output event"
+      - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github.event) }}'
 
   # on-pr:
