@@ -44,6 +44,9 @@ jobs:
       - name: "changed filters"
         run: echo "${{ needs.changes.outputs.filters }}"
 
+      - name: "lets fail"
+        run: exit 1
+
       - name: "changed files"
         run: echo "${{ needs.changes.outputs.files }}"
 
