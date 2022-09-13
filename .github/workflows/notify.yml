@@ -22,8 +22,6 @@ on:
 jobs:
   on-all:
     runs-on: ubuntu-latest
-    env:
-      GHEVENT: ${{ github.event }}
     steps:
       - name: "output event"
         run: echo ${{ github.event }} | jq 
