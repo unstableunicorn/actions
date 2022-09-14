@@ -34,10 +34,6 @@ jobs:
             - src/**
 
   basic:
-    environment: dev
-    concurrency:
-      cancel-in-progress: false
-      group: dev-env
     needs: changes
     runs-on: ubuntu-latest
     steps:
