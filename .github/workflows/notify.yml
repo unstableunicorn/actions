@@ -4,14 +4,14 @@ on:
   pull_request:
     types:
       - closed
-  # workflow_run:
-  #   workflows:
-  #     - "main"
-  #   types:
-  #     - completed
-  #   branches:
-  #     - "*"
-  #     - "main"
+  workflow_run:
+    workflows:
+      - "main-pipeline"
+    types:
+      - completed
+    branches:
+      - "*"
+      - "main"
   push:
     branches:
       - "main"
@@ -20,8 +20,9 @@ on:
 
     
 jobs:
-  on-all:
+  on-workflow:
     runs-on: ubuntu-latest
+    # if: contains(fromJSON('["failure","success"]'), github.event.workflow_run.conclusion)
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
@@ -39,7 +40,7 @@ jobs:
   on-pr-merge:
     runs-on: ubuntu-latest
     # if: github.event_name == 'pull_request' && github.event.pull_request.merged == 'true' && github.event.base_ref == 'main'
-    if: github.event.pull_request.merged == 'true' && github.event.base_ref == 'main'
+    if: ${{ github.event.pull_request.merged == true }} && github.event.base_ref == 'main'
     steps:
       - name: "output event"
         run: | 
@@ -53,7 +54,7 @@ jobs:
   on-deploy:
     runs-on: ubuntu-latest
     # Trigger on CICD Pipeline for trunk runs
-    if: github.event.workflow.name == 'main' && contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
+    if: github.event.workflow.name == 'main-pipeline' && contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
     # if: contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
     steps:
       - name: "output event"
