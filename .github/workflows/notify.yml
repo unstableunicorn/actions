@@ -22,7 +22,7 @@ on:
 jobs:
   on-workflow:
     runs-on: ubuntu-latest
-    if: contains(fromJSON('["failure","success"]'), github.event.workflow_run.conclusion)
+    # if: contains(fromJSON('["failure","success"]'), github.event.workflow_run.conclusion)
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
