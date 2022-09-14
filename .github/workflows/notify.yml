@@ -25,6 +25,16 @@ jobs:
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
+      - name: env vars
+        run: set
+      - name: summary
+        run: | 
+          echo "# Trigger Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Event Name: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Event Type: ${{ github.event.workflow_run.event }}" >> $GITHUB_STEP_SUMMARY
+          echo "Ref Name: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Ref Type: ${{ github.ref_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}" >> $GITHUB_STEP_SUMMARY
 
   # on-pr:
   #   runs-on: ubuntu-latest
@@ -34,10 +44,22 @@ jobs:
   #       run: echo ${{ github.event }}
 
           
-  # on-deploy:
-  #   runs-on: ubuntu-latest
-  #   # Trigger on CICD Pipeline for trunk runs
-  #   if: github.event.workflow.name == 'main' && github.event.ref == 'refs/heads/main'
-  #   steps:
-  #     - name: "output event"
-  #       run: echo ${{ github.event }}
+  on-deploy:
+    runs-on: ubuntu-latest
+    # Trigger on CICD Pipeline for trunk runs
+    # if: github.event.workflow.name == 'main' && contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
+    if: contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
+    steps:
+      - name: "output event"
+        run: |
+          echo "Deployed to: ${{ github.event.deployment_status.environment }}"
+          echo "Deployed outcome: ${{ github.event.deployment_status.state }}"
+      - name: summary
+        run: |
+          echo "# Trigger Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Event Name: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Event Type: ${{ github.event.workflow_run.event }}" >> $GITHUB_STEP_SUMMARY
+          echo "Ref Name: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Ref Type: ${{ github.ref_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "Deployed to: ${{ github.event.deployment_status.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "Deployed State: ${{ github.event.deployment_status.state }}" >> $GITHUB_STEP_SUMMARY
