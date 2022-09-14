@@ -1,14 +1,14 @@
 name: notify on pr merge
 
 on:
-  push:
-    branches:
-      - "main"
+  pull_request:
+    types:
+      - closed
+
 jobs:
   on-pr-merge:
     runs-on: ubuntu-latest
-    # if: github.event_name == 'pull_request' && github.event.pull_request.merged == 'true' && github.event.base_ref == 'main'
-    if: ${{ github.event.pull_request.merged }} && github.event.base_ref == 'main'
+    if: github.event.pull_request.merged == 'true' && github.event.base_ref == 'main'
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
