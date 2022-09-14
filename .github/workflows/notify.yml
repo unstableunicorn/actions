@@ -4,19 +4,19 @@ on:
   pull_request:
     types:
       - closed
-  workflow_run:
-    workflows:
-      - "main"
-    types:
-      - completed
-    branches:
-      - "*"
-      - "main"
+  # workflow_run:
+  #   workflows:
+  #     - "main"
+  #   types:
+  #     - completed
+  #   branches:
+  #     - "*"
+  #     - "main"
   push:
     branches:
       - "main"
-  deployment:
-  deployment_status:
+  # deployment:
+  # deployment_status:
 
     
 jobs:
@@ -47,8 +47,8 @@ jobs:
   on-deploy:
     runs-on: ubuntu-latest
     # Trigger on CICD Pipeline for trunk runs
-    # if: github.event.workflow.name == 'main' && contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
-    if: contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
+    if: github.event.workflow.name == 'main' && contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
+    # if: contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
     steps:
       - name: "output event"
         run: |
