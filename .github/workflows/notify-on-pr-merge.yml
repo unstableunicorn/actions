@@ -23,7 +23,7 @@ jobs:
 
   on-pr-merge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == 'true' && github.event.base_ref == 'main'
+    if: github.event.pull_request.merged == 'true' && github.event.pull_request.base.ref == 'main'
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
