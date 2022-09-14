@@ -4,14 +4,14 @@ on:
   pull_request:
     types:
       - closed
-  # workflow_run:
-  #   workflows:
-  #     - "main"
-  #   types:
-  #     - completed
-  #   branches:
-  #     - "*"
-  #     - "main"
+  workflow_run:
+    workflows:
+      - "main"
+    types:
+      - completed
+    branches:
+      - "*"
+      - "main"
   push:
     branches:
       - "main"
