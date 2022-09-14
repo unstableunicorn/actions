@@ -6,7 +6,7 @@ on:
       - closed
   workflow_run:
     workflows:
-      - "main"
+      - "main-pipeline"
     types:
       - completed
     branches:
@@ -54,7 +54,7 @@ jobs:
   on-deploy:
     runs-on: ubuntu-latest
     # Trigger on CICD Pipeline for trunk runs
-    if: github.event.workflow.name == 'main' && contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
+    if: github.event.workflow.name == 'main-pipeline' && contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
     # if: contains(fromJSON('["failure","success"]'), github.event.deployment_status.state)
     steps:
       - name: "output event"
