@@ -25,7 +25,7 @@ async function run() {
         repo: repo_name,
       });
 
-    core.debug(workflows)
+    console.log(workflows)
 
     if (delete_workflow_pattern && delete_workflow_pattern.toLowerCase() !== "all") {
       console.log(`💬 workflows containing '${delete_workflow_pattern}' will be targeted`);
@@ -57,6 +57,7 @@ async function run() {
           workflow_id: workflow.id
         });
       for (const run of runs) {
+        console.log(run)
         core.debug(`Run: '${workflow.name}' workflow run ${run.id} (status=${run.status})`)
         if (run.status !== "completed") {
           console.log(`👻 Skipped '${workflow.name}' workflow run ${run.id}: it is in '${run.status}' state`);
