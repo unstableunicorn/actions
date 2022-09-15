@@ -23,9 +23,21 @@ on:
         options:
           - "All"
           - active
+          - deleted
+          - disabled_inactivity
+          - disabled_manually
+      delete_run_by_conclusion_pattern:
+        description: 'Remove workflow by state: active, deleted, disabled_fork, disabled_inactivity, disabled_manually'
+        required: true
+        default: "All"
+        type: choice
+        options:
+          - "All"
+          - success
           - failure
-          - waiting
           - skipped
+          - waiting
+          - cancelled
 
 jobs:
   del_runs:
@@ -42,3 +54,4 @@ jobs:
           keep_minimum_runs: ${{ inputs.runs }}
           delete_workflow_pattern: ${{ inputs.delete_workflow_pattern }}
           delete_workflow_by_state_pattern: ${{ inputs.delete_workflow_by_state_pattern }}
+          delete_run_by_conclusion_pattern: ${{ inputs.delete_run_by_conclusion_pattern }}
