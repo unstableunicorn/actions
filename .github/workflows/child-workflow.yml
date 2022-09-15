@@ -35,5 +35,5 @@ jobs:
         if: ${{ contains(inputs.changes, 'src/onlychild') }}
         run: echo "i modified my only child"
         
-      - name: "lets fail"
-        run: exit 1
+      # - name: "lets fail"
+      #   run: exit 1
