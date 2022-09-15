@@ -62,7 +62,9 @@ jobs:
   child:
     uses: ./.github/workflows/child-workflow.yml
     if: ${{ needs.changes.outputs.srcout == 'true' && github.event_name != 'pull_request' }}
-    needs: changes
+    needs:
+      - basic
+      - changes
     with:
       changes: ${{ needs.changes.outputs.files }}
   
@@ -74,7 +76,7 @@ jobs:
       group: prod-env
     needs:
       - changes
-      - basic
+      - child
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3 # local actions need a checkout
