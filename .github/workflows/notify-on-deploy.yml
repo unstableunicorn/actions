@@ -2,9 +2,7 @@
 name: deploy notification
 
 on:
-  workflow_dispatch:
-    
-  # deployment_status:
+  deployment_status:
 
     
 jobs:
