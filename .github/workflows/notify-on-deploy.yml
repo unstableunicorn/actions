@@ -32,7 +32,7 @@ jobs:
 
   on-deploy-skipped:
     runs-on: ubuntu-latest
-    if: contains(fromJSON('["failure","success"]'), github.event.deployment_status.state) != 'true'
+    if: contains(fromJSON('["failure","success"]'), github.event.deployment_status.state) == false
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
