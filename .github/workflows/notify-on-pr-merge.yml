@@ -8,7 +8,7 @@ on:
 jobs:
   pr-closed-no-merge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged != 'true'
+    if: github.event.pull_request.merged != true
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
@@ -26,7 +26,7 @@ jobs:
 
   pr-merged-main:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == 'true' && github.event.pull_request.base.ref == 'main'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
@@ -42,7 +42,7 @@ jobs:
 
   pr-merged-not-main:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == 'true' && github.event.pull_request.base.ref != 'main'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref != 'main'
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
