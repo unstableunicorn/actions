@@ -30,7 +30,7 @@ jobs:
 
   on-workflow-skipped:
     runs-on: ubuntu-latest
-    if: contains(fromJSON('["failure","success"]'), github.event.workflow_run.conclusion) != 'true'
+    if: contains(fromJSON('["failure","success"]'), github.event.workflow_run.conclusion) == 'false'
     steps:
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
