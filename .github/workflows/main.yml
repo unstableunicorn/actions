@@ -1,14 +1,18 @@
 name: main-pipeline
 
 on:
-  push:
-    paths-ignore:
-      - ".gitignore"
-      - "LICENSE"
-      - "README.md"
-    branches:
-      - "main"
+  # push:
+  #   paths-ignore:
+  #     - ".gitignore"
+  #     - "LICENSE"
+  #     - "README.md"
+  #   branches:
+  #     - "main"
   pull_request:
+    types:
+      - "opened"
+      - "reopened"
+      - "closed"
     paths-ignore:
       - ".gitignore"
       - "LICENSE"
@@ -40,6 +44,9 @@ jobs:
       ruleApp: ${{ steps.ruleapp.outputs.ruleapp }}
       label: ${{ steps.label.outputs.label }}
     steps:
+      - name: merged
+        if: github.event.pull_request.merged == true
+        run: echo "I was merged"
       - name: get pbi number
         id: pbi
         run: |
@@ -73,6 +80,9 @@ jobs:
     needs: changes
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - name: git
+        run: git status
       - name: "${{ github.event_name }}"
         run: echo '${{ toJSON(github) }}'
       - name: env vars
