@@ -17,71 +17,111 @@ on:
       - "main"
     
 jobs:
-  changes:
+  # changes:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     srcout: ${{ steps.filterid.outputs.src }}
+  #     filters: ${{ steps.filterid.outputs.changes }}
+  #     files: ${{ steps.filterid.outputs.src_files }}
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - uses: dorny/paths-filter@v2
+  #     id: filterid
+  #     with:
+  #       list-files: 'json'
+  #       filters: |
+  #         src:
+  #           - src/**
+
+  get-branch-details:
     runs-on: ubuntu-latest
     outputs:
-      srcout: ${{ steps.filterid.outputs.src }}
-      filters: ${{ steps.filterid.outputs.changes }}
-      files: ${{ steps.filterid.outputs.src_files }}
+      pbi: ${{ steps.pbi.outputs.pbi }}
+      ruleApp: ${{ steps.ruleapp.outputs.ruleapp }}
+      label: ${{ steps.label.outputs.label }}
     steps:
-    - uses: actions/checkout@v3
-    - uses: dorny/paths-filter@v2
-      id: filterid
-      with:
-        list-files: 'json'
-        filters: |
-          src:
-            - src/**
+      - name: get pbi number
+        id: pbi
+        run: |
+          result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})(.*)/\1/')
+          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; else echo "pbi=$result"; fi
+          echo "pbi=$result" >> $GITHUB_OUTPUT
+      - name: get rule app name
+        id: ruleapp 
+        run: |
+          result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})(.*)/\2/')
+          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; else echo "ruleapp=$result"; fi
+          echo "ruleapp=$result" >> $GITHUB_OUTPUT
+      - name: get label
+        id: label
+        run: |
+          result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})(.*)/\3/')
+          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; else echo "label=$result"; fi
+          echo "label=$result" >> $GITHUB_OUTPUT
 
-  basic:
-    needs: changes
+  test-output:
     runs-on: ubuntu-latest
+    needs: get-branch-details
     steps:
-      - name: "changed filters"
-        run: echo "${{ needs.changes.outputs.filters }}"
+      - name: print outputs
+        run: | 
+          echo "pbi = ${{ needs.get-branch-details.outputs.pbi }}"
+          echo "label = ${{ needs.get-branch-details.outputs.label }}"
+          echo "ruleapp = ${{ needs.get-branch-details.outputs.ruleApp }}"
 
-      - name: "changed files"
-        run: echo "${{ needs.changes.outputs.files }}"
+  # basic:
+  #   needs: changes
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "${{ github.event_name }}"
+  #       run: echo '${{ toJSON(github) }}'
+  #     - name: env vars
+  #       run: set
+  #     - name: "changed filters"
+  #       run: echo "${{ needs.changes.outputs.filters }}"
 
-      - name: "child one"
-        if: ${{ contains(needs.changes.outputs.files, 'src/children/one') }}
-        run: echo "i modified child one"
+  #     - name: "changed files"
+  #       run: echo "${{ needs.changes.outputs.files }}"
 
-      - name: "child two" 
-        if: ${{ contains(needs.changes.outputs.files, 'src/children/two') }}
-        run: echo "i modified child two"
+  #     - name: "child one"
+  #       if: ${{ contains(needs.changes.outputs.files, 'src/children/one') }}
+  #       run: echo "i modified child one"
+
+  #     - name: "child two" 
+  #       if: ${{ contains(needs.changes.outputs.files, 'src/children/two') }}
+  #       run: echo "i modified child two"
       
-      - name: "children"
-        if: ${{ contains(needs.changes.outputs.files, 'src/children/children.yml') }}
-        run: echo "i modified my children"
+  #     - name: "children"
+  #       if: ${{ contains(needs.changes.outputs.files, 'src/children/children.yml') }}
+  #       run: echo "i modified my children"
 
-      - name: "only child"
-        if: ${{ contains(needs.changes.outputs.files, 'src/onlychild') }}
-        run: echo "i modified my only child"
+  #     - name: "only child"
+  #       if: ${{ contains(needs.changes.outputs.files, 'src/onlychild') }}
+  #       run: echo "i modified my only child"
   
-  child:
-    uses: ./.github/workflows/child-workflow.yml
-    if: ${{ needs.changes.outputs.srcout == 'true' && github.event_name != 'pull_request' }}
-    needs:
-      - basic
-      - changes
-    with:
-      changes: ${{ needs.changes.outputs.files }}
+  # child:
+  #   uses: ./.github/workflows/child-workflow.yml
+  #   if: ${{ needs.changes.outputs.srcout == 'true' && github.event_name != 'pull_request' }}
+  #   needs:
+  #     - basic
+  #     - changes
+  #   with:
+  #     changes: ${{ needs.changes.outputs.files }}
   
-  action-one:
-    if: ${{ needs.changes.outputs.srcout == 'true' && github.event_name != 'pull_request' }}
-    environment: prod
-    concurrency:
-      cancel-in-progress: false
-      group: prod-env
-    needs:
-      - changes
-      - child
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3 # local actions need a checkout
-    - name: "action-one"
-      uses: ./.github/actions/action-one
-      with:
-        changes: ${{ needs.changes.outputs.files }}
-        run: ${{ needs.changes.outputs.srcout == 'true' }}
+  # action-one:
+  #   if: ${{ needs.changes.outputs.srcout == 'true' && github.event_name != 'pull_request' }}
+  #   environment: prod
+  #   concurrency:
+  #     cancel-in-progress: false
+  #     group: prod-env
+  #   needs:
+  #     - changes
+  #     - child
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3 # local actions need a checkout
+  #   - name: "action-one"
+  #     uses: ./.github/actions/action-one
+  #     with:
+  #       changes: ${{ needs.changes.outputs.files }}
+  #       run: ${{ needs.changes.outputs.srcout == 'true' }}
