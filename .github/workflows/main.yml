@@ -12,6 +12,7 @@ on:
     types:
       - "opened"
       - "reopened"
+      - "synchronize"
       - "closed"
     paths-ignore:
       - ".gitignore"
