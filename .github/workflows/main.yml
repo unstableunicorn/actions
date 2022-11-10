@@ -40,31 +40,21 @@ jobs:
   get-branch-details:
     runs-on: ubuntu-latest
     outputs:
-      pbi: ${{ steps.pbi.outputs.pbi }}
-      ruleApp: ${{ steps.ruleapp.outputs.ruleapp }}
-      label: ${{ steps.label.outputs.label }}
+      pbi: ${{ steps.details.outputs.pbi }}
+      ruleApp: ${{ steps.details.outputs.ruleapp }}
+      label: ${{ steps.details.outputs.label }}
     steps:
       - name: merged
         if: github.event.pull_request.merged == true
         run: echo "I was merged"
-      - name: get pbi number
-        id: pbi
+      - name: get details number
+        id: details
         run: |
-          result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})(.*)/\1/')
-          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; else echo "pbi=$result"; fi
-          echo "pbi=$result" >> $GITHUB_OUTPUT
-      - name: get rule app name
-        id: ruleapp 
-        run: |
-          result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})(.*)/\2/')
-          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; else echo "ruleapp=$result"; fi
-          echo "ruleapp=$result" >> $GITHUB_OUTPUT
-      - name: get label
-        id: label
-        run: |
-          result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})(.*)/\3/')
-          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; else echo "label=$result"; fi
-          echo "label=$result" >> $GITHUB_OUTPUT
+          result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})(.*)/\1 \2 \3/')
+          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; else echo "result=$result"; fi
+          echo "pbi=${result[0]}" >> $GITHUB_OUTPUT
+          echo "ruleapp=${result[1]}" >> $GITHUB_OUTPUT
+          echo "label=${result[2]}" >> $GITHUB_OUTPUT
 
   test-output:
     runs-on: ubuntu-latest
