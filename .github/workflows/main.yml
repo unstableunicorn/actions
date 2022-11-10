@@ -44,19 +44,19 @@ jobs:
         id: pbi
         run: |
           result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})/\1/')
-          if [ "$result" == "${{ github.head_ref }}"]; then exit 1; fi
+          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; fi
           echo "pbi=$result" >> $GITHUB_ENV
       - name: get rule app name
         id: ruleapp 
         run: |
           result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})/\2/')
-          if [ "$result" == "${{ github.head_ref }}"]; then exit 1; fi
+          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; fi
           echo "ruleapp=$result" >> $GITHUB_ENV
       - name: get label
         id: label
         run: |
           result=$(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})/\3/')
-          if [ "$result" == "${{ github.head_ref }}"]; then exit 1; fi
+          if [ "$result" == "${{ github.head_ref }}" ]; then exit 1; fi
           echo "ruleapp=$result" >> $GITHUB_ENV
 
   test-output:
