@@ -48,7 +48,7 @@ jobs:
       - name: merged
         if: github.event.pull_request.merged == true
         run: echo "I was merged"
-      - name: get details number
+      - name: get details
         id: details
         run: |
           result=($(echo "${{ github.head_ref }}" | sed -E 's/^[[:alnum:]]{3,}\/([0-9]{3,})-([[:alnum:]]{3,})-([[:alnum:]]{3,})(.*)/\1 \2 \3/'))
