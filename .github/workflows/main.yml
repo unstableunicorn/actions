@@ -37,6 +37,10 @@ jobs:
     needs: changes
     runs-on: ubuntu-latest
     steps:
+      - name: "${{ github.event_name }}"
+        run: echo '${{ toJSON(github) }}'
+      - name: env vars
+        run: set
       - name: "changed filters"
         run: echo "${{ needs.changes.outputs.filters }}"
 
