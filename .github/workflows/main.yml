@@ -17,22 +17,22 @@ on:
       - "main"
     
 jobs:
-  # changes:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     srcout: ${{ steps.filterid.outputs.src }}
-  #     filters: ${{ steps.filterid.outputs.changes }}
-  #     files: ${{ steps.filterid.outputs.src_files }}
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - uses: dorny/paths-filter@v2
-  #     id: filterid
-  #     with:
-  #       list-files: 'json'
-  #       filters: |
-  #         src:
-  #           - src/**
-
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      srcout: ${{ steps.filterid.outputs.src }}
+      filters: ${{ steps.filterid.outputs.changes }}
+      files: ${{ steps.filterid.outputs.src_files }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2
+      id: filterid
+      with:
+        list-files: 'json'
+        filters: |
+          src:
+            - src/**
+ 
   get-branch-details:
     runs-on: ubuntu-latest
     outputs:
@@ -69,35 +69,35 @@ jobs:
           echo "label = ${{ needs.get-branch-details.outputs.label }}"
           echo "ruleapp = ${{ needs.get-branch-details.outputs.ruleApp }}"
 
-  # basic:
-  #   needs: changes
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: "${{ github.event_name }}"
-  #       run: echo '${{ toJSON(github) }}'
-  #     - name: env vars
-  #       run: set
-  #     - name: "changed filters"
-  #       run: echo "${{ needs.changes.outputs.filters }}"
+  basic:
+    needs: changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: "${{ github.event_name }}"
+        run: echo '${{ toJSON(github) }}'
+      - name: env vars
+        run: set
+      - name: "changed filters"
+        run: echo "${{ needs.changes.outputs.filters }}"
 
-  #     - name: "changed files"
-  #       run: echo "${{ needs.changes.outputs.files }}"
+      - name: "changed files"
+        run: echo "${{ needs.changes.outputs.files }}"
 
-  #     - name: "child one"
-  #       if: ${{ contains(needs.changes.outputs.files, 'src/children/one') }}
-  #       run: echo "i modified child one"
+      - name: "child one"
+        if: ${{ contains(needs.changes.outputs.files, 'src/children/one') }}
+        run: echo "i modified child one"
 
-  #     - name: "child two" 
-  #       if: ${{ contains(needs.changes.outputs.files, 'src/children/two') }}
-  #       run: echo "i modified child two"
+      - name: "child two" 
+        if: ${{ contains(needs.changes.outputs.files, 'src/children/two') }}
+        run: echo "i modified child two"
       
-  #     - name: "children"
-  #       if: ${{ contains(needs.changes.outputs.files, 'src/children/children.yml') }}
-  #       run: echo "i modified my children"
+      - name: "children"
+        if: ${{ contains(needs.changes.outputs.files, 'src/children/children.yml') }}
+        run: echo "i modified my children"
 
-  #     - name: "only child"
-  #       if: ${{ contains(needs.changes.outputs.files, 'src/onlychild') }}
-  #       run: echo "i modified my only child"
+      - name: "only child"
+        if: ${{ contains(needs.changes.outputs.files, 'src/onlychild') }}
+        run: echo "i modified my only child"
   
   # child:
   #   uses: ./.github/workflows/child-workflow.yml
